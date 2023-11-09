@@ -1,0 +1,48 @@
+Title: Fuzzy Set Operations in Python using scikit-fuzzy
+
+Introduction:
+Fuzzy set operations play a crucial role in handling uncertainty and imprecision in various applications. This write-up explores and demonstrates common fuzzy set operations using Python and the scikit-fuzzy library.
+
+Installation:
+Ensure that the scikit-fuzzy library is installed:
+
+bash
+Copy code
+pip install -U scikit-fuzzy
+Fuzzy Set Operations:
+
+Union Operation:
+The union of two fuzzy sets A and B, denoted as A ∪ B, is a fuzzy set whose membership function is the maximum of the membership values of A and B at each point.
+
+python
+Copy code
+import numpy as np
+import skfuzzy as fuzz
+
+# Membership functions for sets A and B
+A = np.array([0.2, 0.4, 0.6, 1.0])
+B = np.array([0.8, 0.5, 0.2, 0.0])
+
+# Union operation
+union_result = np.fmax(A, B)
+Intersection Operation:
+The intersection of two fuzzy sets A and B, denoted as A ∩ B, is a fuzzy set whose membership function is the minimum of the membership values of A and B at each point.
+
+python
+Copy code
+# Intersection operation
+intersection_result = np.fmin(A, B)
+Complement Operation:
+The complement of a fuzzy set A, denoted as A', is a fuzzy set whose membership function is 1 minus the membership function of A.
+
+python
+Copy code
+# Complement operation
+complement_result = 1 - A
+Conclusion:
+The scikit-fuzzy library in Python provides efficient tools for performing fuzzy set operations. These operations are valuable in scenarios where uncertainties need to be managed and analyzed.
+
+References:
+
+scikit-fuzzy Documentation
+This write-up now includes the solutions for each fuzzy set operation. If you have specific requirements or need a similar write-up for MATLAB, feel free to le
