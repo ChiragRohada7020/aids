@@ -1,0 +1,67 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import networkx as nx
+import geopandas as gpd
+
+# Load datasets
+text_data = pd.read_csv('text_data.csv')  # Assuming a CSV file with text reviews
+graph_data = pd.read_csv('graph_data.csv')  # Assuming a CSV file with edge list
+spatial_data = gpd.read_file('spatial_data.geojson')  # Assuming a GeoJSON file with spatial information
+
+# Data Insights:
+
+# 1. Text Data Analysis:
+# Sentiment Analysis
+text_data['Sentiment'] = text_data['Review'].apply(lambda x: 1 if 'positive' in x.lower() else (-1 if 'negative' in x.lower() else 0))
+
+# Plot Sentiment Distribution
+plt.figure(figsize=(12, 5))
+
+plt.subplot(1, 2, 1)
+sns.countplot(x='Sentiment', data=text_data, palette='viridis')
+plt.title('Sentiment Distribution in Text Data')
+plt.xlabel('Sentiment')
+plt.ylabel('Count')
+
+plt.subplot(1, 2, 2)
+text_data['Sentiment'].value_counts().plot.pie(autopct='%1.1f%%', colors=['lightcoral', 'lightgrey', 'lightgreen'])
+plt.title('Sentiment Distribution (Pie Chart)')
+
+plt.tight_layout()
+plt.show()
+
+# 2. Graph Data Analysis:
+# Create a graph from the edge list
+graph = nx.from_pandas_edgelist(graph_data, 'Source', 'Target')
+
+# Plot Network Graph
+plt.figure(figsize=(12, 8))
+pos = nx.spring_layout(graph)  # Layout for better visualization
+nx.draw(graph, pos, with_labels=True, font_weight='bold', node_color='skyblue', edge_color='gray', node_size=500)
+plt.title('Graph Representation of Locations')
+plt.show()
+
+# Calculate Degree Centrality
+degree_centrality = nx.degree_centrality(graph)
+most_influential_nodes = sorted(degree_centrality, key=degree_centrality.get, reverse=True)[:3]
+
+print('Most Influential Nodes:', most_influential_nodes)
+
+# 3. Spatial Data Analysis:
+# Plot Spatial Distribution of Locations
+plt.figure(figsize=(12, 8))
+
+plt.subplot(1, 2, 1)
+spatial_data.plot(marker='o', color='red', markersize=50, figsize=(10, 8))
+plt.title('Spatial Distribution of Locations')
+plt.xlabel('Longitude')
+plt.ylabel('Latitude')
+
+plt.subplot(1, 2, 2)
+sns.kdeplot(data=spatial_data, x='Longitude', y='Latitude', fill=True, cmap='viridis')
+plt.title('Spatial Density (Kernel Density Estimation)')
+
+plt.tight_layout()
+plt.show()
